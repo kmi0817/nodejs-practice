@@ -11,8 +11,8 @@ npm install ejs --save
 
 2. Runs
 
-- 서버 실행 코드가 www.js에 있기 떄문에 아래 코드로 실행
+- The command belowe is defined in package.json
 
 ```
-node ./bin/www.js
+npm start
 ```
