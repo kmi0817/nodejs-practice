@@ -1,6 +1,28 @@
 {
+  "name": "nodejs-practice",
+  "description": "MVC, Module, OOP, ORM, ES6",
+  "version": "1.0.0",
+  "main": "app.js",
+  "bin": {
+    "nodejs-practice": "bin/www.js"
+  },
   "dependencies": {
     "ejs": "^3.1.9",
     "express": "^4.18.2"
-  }
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node ./bin/www.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kmi0817/nodejs-practice.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kmi0817/nodejs-practice/issues"
+  },
+  "homepage": "https://github.com/kmi0817/nodejs-practice#readme"
 }
