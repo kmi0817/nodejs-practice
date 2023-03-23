@@ -8,7 +8,7 @@ class User {
     }
 
     login() {
-        const client = this.client;
+        const client = this.body;
         const { id, password } = UserStorage.getUserInfo(client.id);
 
         if (id) { // if id exists
@@ -21,7 +21,7 @@ class User {
     }
 
     register() {
-        const client = this.client;
+        const client = this.body;
         const response = UserStorage.save(client);
         return response;
     }
