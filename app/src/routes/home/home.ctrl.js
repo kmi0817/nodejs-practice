@@ -1,9 +1,6 @@
 "use strict";
 
-const users = {
-    id: [ "안녕1", "안녕아이디2", "안녕하슈3" ],
-    password: [ "1234", "12345", "123456" ]
-};
+const UserStorage = require("../../models/UserStorage");
 
 const output = {
     hello: (req, res) => {
@@ -20,6 +17,8 @@ const process = {
         const id = req.body.id,
             password = req.body.password;
         
+        const users = UserStorage.getUsers("id", "password");
+
         const response = {};
         if (users.id.includes(id)) {
             const idx = users.id.indexOf(id);
