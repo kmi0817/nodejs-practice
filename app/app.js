@@ -13,6 +13,9 @@ const accessLogStream = require("./src/config/log");
 // Routing
 const home = require("./src/routes/home");
 
+const logger = require("./src/config/logger");
+logger.error("hello Everyone");
+
 // app setting
 app.set("views", "./src/views"); // 화면 뷰 관리할 파일이 저장될 폴더 이름이 2번째 파라미터
 app.set("view engine", "ejs"); // 뷰 엔진으로 ejs을 사용함

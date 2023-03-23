@@ -13,6 +13,7 @@ npm install mysql -s
 npm install dotenv -s // 환경변수 관리
 npm install morgan -s // 로그 관리
 npm install app-root-path -s // 루트 경로 가져오는 모듈
+npm install winston -s
 ```
 
 2. Run
