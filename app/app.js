@@ -2,6 +2,9 @@
 
 const express = require("express"); // express 모듈
 const bodyParser = require("body-parser"); // req의 body 파싱 모듈
+const dotenv = require("dotenv"); // 어떤 OS에서 개발하더라도 동일하게 환경변수를 등록하고 가져올 수 있는 모듈
+dotenv.config();
+
 const app = express(); // express 실행하여 app 변수에 할당
 
 // Routing

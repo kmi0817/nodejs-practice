@@ -1,7 +1,7 @@
 "use strict";
 
 const app = require("../app"); // app.js 가져오기
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
     console.log(`localhost:${PORT} runs`);

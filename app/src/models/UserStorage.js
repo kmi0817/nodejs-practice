@@ -2,62 +2,28 @@
 
 const { stringify } = require("querystring");
 
-const fs = require("fs").promises;
+const db = require("../config/db");
 
-// 클래스 내 변수 선언 시 const 등의 변수 선언자 필요X
 class UserStorage {
-    // 가독성을 위해 따로 캡슐화한 메소드 (일반 getUserInfo와 다르다)
-    // private 메소드는 맨 위에 작성한다.
-    static #getUserInfo(data, id) {
-        const users = JSON.parse(data);
-        const idx = users.id.indexOf(id);
-        // Object.keys(users) === [id, password, name]
-        const userInfo = Object.keys(users).reduce((newUser, info) => {
-            newUser[info] = users[info][idx];
-            return newUser;
-        }, {});
-        return userInfo;
-    }
-
-    static #getUsers(data, isAll, fields) {
-        const users = JSON.parse(data);
-        if (isAll) return users;
-
-        const newUsers = fields.reduce((newUsers, field) => {
-            if (users.hasOwnProperty(field)) {
-                newUsers[field] = users[field];
-            }
-            return newUsers;
-        }, {});
-        return newUsers;
-    }
-
-    static getUsers(isAll, ...fields) { // use ... when you don't know how many parameters would be input (it's array)
-        return fs.readFile("./src/databases/users.json")
-        .then((data) => {
-            return this.#getUsers(data, isAll, fields);
-        })
-        .catch(console.error);
-    }
-
     static getUserInfo(id) {
-        return fs.readFile("./src/databases/users.json")
-        .then((data) => {
-            return this.#getUserInfo(data, id);
-        })
-        .catch(console.error);
+        // promise 객체 생성: 안에 있는 db 쿼리 성공 시 relove, 실패 시 reject 실행
+        return new Promise((resolve, reject) => {
+            const query = "SELECT * FROM users WHERE id = ?;"; // ?에 [id]가 들어간다. (보안상 취약한 "~ WHERE id = " + id 대신 사용)
+            db.query(query, [id], (err, data) => {
+                if (err) reject(`${err}`); // err이 Object이므로, 문자열로 만들어준다.
+                resolve(data[0]);
+            });
+        });
     }
 
     static async save(userInfo) {
-        const users = await this.getUsers(true); // true means 모든 값을 가져오겠다.
-        if (users.id.includes(userInfo.id)) {
-            throw "이미 존재하는 아이디입니다.";
-        }
-        users.id.push(userInfo.id);
-        users.name.push(userInfo.name);
-        users.password.push(userInfo.password);
-        fs.writeFile("./src/databases/users.json", JSON,stringify(users));
-        return { success: true };
+        return new Promise((resolve, reject) => {
+            const query = "INSERT INTO users(id, name, password) VALUES(?, ?, ?);";
+            db.query(query, [userInfo.id, userInfo.name, userInfo.password], (err) => {
+                if (err) reject(`${err}`);
+                resolve({ success: true });
+            });
+        });
     }
 }
 
