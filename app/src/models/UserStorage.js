@@ -1,5 +1,7 @@
 "user strict";
 
+const { stringify } = require("querystring");
+
 const fs = require("fs").promises;
 
 // 클래스 내 변수 선언 시 const 등의 변수 선언자 필요X
@@ -17,16 +19,25 @@ class UserStorage {
         return userInfo;
     }
 
-    static getUsers(...fields) { // use ... when you don't know how many parameters would be input (it's array)
-        // const users = this.#users;
+    static #getUsers(data, isAll, fields) {
+        const users = JSON.parse(data);
+        if (isAll) return users;
+
         const newUsers = fields.reduce((newUsers, field) => {
             if (users.hasOwnProperty(field)) {
                 newUsers[field] = users[field];
             }
             return newUsers;
         }, {});
-        // console.log(newUsers);
         return newUsers;
+    }
+
+    static getUsers(isAll, ...fields) { // use ... when you don't know how many parameters would be input (it's array)
+        return fs.readFile("./src/databases/users.json")
+        .then((data) => {
+            return this.#getUsers(data, isAll, fields);
+        })
+        .catch(console.error);
     }
 
     static getUserInfo(id) {
@@ -37,11 +48,15 @@ class UserStorage {
         .catch(console.error);
     }
 
-    static save(userInfo) {
-        // const users = this.#users;
+    static async save(userInfo) {
+        const users = await this.getUsers(true); // true means 모든 값을 가져오겠다.
+        if (users.id.includes(userInfo.id)) {
+            throw "이미 존재하는 아이디입니다.";
+        }
         users.id.push(userInfo.id);
         users.name.push(userInfo.name);
         users.password.push(userInfo.password);
+        fs.writeFile("./src/databases/users.json", JSON,stringify(users));
         return { success: true };
     }
 }
