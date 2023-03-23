@@ -13,9 +13,6 @@ const accessLogStream = require("./src/config/log");
 // Routing
 const home = require("./src/routes/home");
 
-const logger = require("./src/config/logger");
-logger.error("hello Everyone");
-
 // app setting
 app.set("views", "./src/views"); // 화면 뷰 관리할 파일이 저장될 폴더 이름이 2번째 파라미터
 app.set("view engine", "ejs"); // 뷰 엔진으로 ejs을 사용함
@@ -24,6 +21,7 @@ app.use(bodyParser.json()); // bodyPaser가 json 데이터 파싱하도록 명�
 app.use(bodyParser.urlencoded({ extended: true })); // URL을 통해 전달되는 데이터에 한글, 공백 등과 같은 문자가 포함될 경우 제대로 인식되지 않는 문제 해결
 app.use(morgan("dev")); // dev: 프로젝트 개발 버전에서 콘솔에 출력하기 위한 용도로 사용하는 포맷
 app.use(morgan("common", { stream: accessLogStream }));
+
 app.use("/", home); // use: 미들웨어를 등록하는 메소드
 
 module.exports = app; // app을 내보낸다.

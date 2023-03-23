@@ -1,28 +1,47 @@
 const { createLogger, transports, format } = require("winston");
-const { combine, timestamp, json, simple, colorize, label, printf } = format;
+const { combine, timestamp, simple, colorize, label, printf } = format;
 
 const printFormat = printf(({ timestamp, label, level, message }) => {
     return `${timestamp} [${label}] ${level}: ${message}`;
 });
 
-const printLogFormat = combine(
-    label({
-        label: "백엔드 맛보기"
+const printLogFormat = {
+    file: combine(
+        label({
+            label: "백엔드 맛보기"
+        }),
+        timestamp({
+            format: "YYYY-MM-DD HH:mm:dd",
+        }),
+        printFormat
+    ),
+    console: combine(
+        colorize(),
+        simple()
+    ),
+};
+
+const options = {
+    file:  new transports.File({
+        filename: "access.log",
+        dirname: "./logs",
+        level: "info",
+        format: printLogFormat.file,
     }),
-    colorize(),
-    timestamp({
-        format: "YYYY-MM-DD HH:mm:dd",
+    console: new transports.Console({
+        level: "info",
+        format: printLogFormat.console,
     }),
-    printFormat
-);
+};
 
 const logger = createLogger({
-    transports: [
-        new transports.Console({
-            level: "info",
-            format: printLogFormat,
-        }),
-    ], //print on console
+    transports: [options.file],
 });
+
+// NODE_ENV가 "dev"면 개발 중인 서버, "production"은 운영 중인 서버
+// "dev"라면, 콘솔 창에서도 로그를 출력하도록 추가한다.
+if (process.env.NODE_ENV !== "production") {
+    logger.add(options.console);
+}
 
 module.exports = logger;

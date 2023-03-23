@@ -4,6 +4,8 @@ MVC, Module, OOP, ORM, ES6
 
 1. Installation
 
+- winston-daily-rotate-file: 실제 운영할 때 사용하길 추천, 날짜별로 모듈 관리 가능
+
 ```
 npm install express --save
 npm install ejs --save
