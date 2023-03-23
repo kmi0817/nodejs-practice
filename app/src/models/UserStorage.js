@@ -11,7 +11,7 @@ class UserStorage {
             const query = "SELECT * FROM users WHERE id = ?;"; // ?에 [id]가 들어간다. (보안상 취약한 "~ WHERE id = " + id 대신 사용)
             db.query(query, [id], (err, data) => {
                 if (err) reject(`${err}`); // err이 Object이므로, 문자열로 만들어준다.
-                resolve(data[0]);
+                else resolve(data[0]); // resolve와 reject가 같이 있으면 resolve가 반환되므로, else로 구분한다.
             });
         });
     }
@@ -21,7 +21,7 @@ class UserStorage {
             const query = "INSERT INTO users(id, name, password) VALUES(?, ?, ?);";
             db.query(query, [userInfo.id, userInfo.name, userInfo.password], (err) => {
                 if (err) reject(`${err}`);
-                resolve({ success: true });
+                else resolve({ success: true });
             });
         });
     }
