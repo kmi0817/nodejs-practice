@@ -10,7 +10,9 @@ npm install ejs --save
 npm install nodemon -g
 npm install body-parser -s
 npm install mysql -s
-npm install dotenv -s
+npm install dotenv -s // 환경변수 관리
+npm install morgan -s // 로그 관리
+npm install app-root-path -s // 루트 경로 가져오는 모듈
 ```
 
 2. Run
